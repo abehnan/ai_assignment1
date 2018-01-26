@@ -40,6 +40,7 @@ class Main {
         int steps = 0;
         while(!stack.isEmpty()) {
             current_node = stack.pop();
+            System.out.println("step " + steps++);
             current_node.print();
 
             if(Arrays.deepEquals(current_node.getGrid(), goal.getGrid())) break;
@@ -53,11 +54,45 @@ class Main {
                 else if(!Node.hasBeenVisited(n.getGrid(), n))
                     stack.push(n);
             }
-            System.out.println("step " + ++steps);
         }
     }
 
+    private static void ids(Node s, Node goal) {
+		int max_depth = 0;
+		Stack<Node> stack = new Stack<>();
+		Node current_node;
+		ArrayList<int[][]> successors = new ArrayList<>();
 
+		outer:
+		while (true) {
+			System.out.println("max_depth = " + max_depth);
+			stack.push(s);
+
+			while(!stack.isEmpty()) {
+
+                current_node = stack.pop();
+
+                if (current_node.getDepth() > max_depth) continue;
+
+                System.out.println("depth: " + current_node.getDepth());
+                current_node.print();
+
+                if(Arrays.deepEquals(current_node.getGrid(),goal.getGrid()))
+                    break outer;
+
+                successors = current_node.generatePossibleMoves();
+                for(int i=successors.size()-1; i>=0; i--) {
+                    Node n = new Node(successors.get(i),current_node.getDepth()+1, current_node);
+                    if(!Node.hasBeenVisited(n.getGrid(), n))
+                        stack.push(n);
+                }
+            }
+            System.out.println();
+			successors.clear();
+			max_depth++;
+		}
+
+	}
 
     public static void main(String[] args) {
 
@@ -70,14 +105,23 @@ class Main {
 
         System.out.println("1. bfs");
         System.out.println("2. dfs");
+        System.out.println("3. ifs");
         System.out.println("Please enter an option: ");
         input = scanner.nextInt();
-        if (input == 1)
-            bfs(start_node,goal_node);
-        else if (input == 2)
-            dfs(start_node,goal_node);
-        else
-            System.out.println("Invalid choice");
+        switch(input){
+            case 1:
+                bfs(start_node,goal_node);
+                break;
+            case 2:
+                dfs(start_node,goal_node);
+                break;
+            case 3:
+                ids(start_node,goal_node);
+                break;
+            default:
+                System.out.println("Invalid choice");
+                break;
+        }
 
     }
 }
