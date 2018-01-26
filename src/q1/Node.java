@@ -34,7 +34,7 @@ class Node {
     // returns true if the grid state has already been encountered
     static boolean hasBeenVisited(int[][] grid, Node n) {
         return n.getParent() != null && (Arrays.deepEquals(grid, n.getParent().getGrid()) || hasBeenVisited(grid, n.getParent()));
-}
+    }
 
     // generates all possible grid configurations by applying all valid operations
     // order of the returned grids is the order of preference

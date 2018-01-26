@@ -12,11 +12,11 @@ public class Main {
     private static ArrayList<Result> hillClimbing() {
 
         double startingPoint, delta, x, currentValue, leftNeighbour, rightNeighbour, leftGap, rightGap;
-        double threshold = 0.000001;
+        double threshold = Double.MIN_VALUE;
         int steps;
         ArrayList<Result> results = new ArrayList<>(100);
 
-        for (startingPoint = 0; startingPoint < 11; startingPoint++) {
+        for (startingPoint = 0; startingPoint <= 10; startingPoint++) {
             for (delta = 0.01; delta <= 0.1; delta = delta + 0.01) {
                 x = startingPoint;
                 steps = 0;
