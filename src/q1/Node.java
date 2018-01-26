@@ -15,6 +15,20 @@ class Node {
         this.parent = parent;
     }
 
+
+    int[][] getGrid() {
+        return grid;
+    }
+
+    q1.Node getParent() {
+        return parent;
+    }
+
+    int getDepth() {
+        return depth;
+    }
+
+
     void print() {
         System.out.println(Arrays.deepToString(getGrid()));
     }
@@ -24,9 +38,8 @@ class Node {
         return n.getParent() != null && (Arrays.deepEquals(grid, n.getParent().getGrid()) || hasBeenVisited(grid, n.getParent()));
     }
 
-
     // redo this one
-    ArrayList<int[][]> getSuccessors() {
+    ArrayList<int[][]> generatePossibleMoves() {
 
         ArrayList<int[][]> successors = new ArrayList<>();
         int[][] successor1 = new int[2][3];
@@ -34,7 +47,6 @@ class Node {
         int[][] successor3 = new int[2][3];
         int i, j = 0;
         int temp1, temp2, temp3;
-
 
         find_zero_location:
         for(i = 0; i < 2; i++) {
@@ -47,11 +59,10 @@ class Node {
 
         // copy grid to three successors
         for (int k = 0; k < 2; k++) {
-            successor1[k] = Arrays.copyOf(getGrid()[k], getGrid()[k].length);
-            successor2[k] = Arrays.copyOf(getGrid()[k], getGrid()[k].length);
-            successor3[k] = Arrays.copyOf(getGrid()[k], getGrid()[k].length);
+            System.arraycopy(getGrid()[k], 0, successor1[k], 0, getGrid()[k].length);
+            System.arraycopy(getGrid()[k], 0, successor2[k], 0, getGrid()[k].length);
+            System.arraycopy(getGrid()[k], 0, successor3[k], 0, getGrid()[k].length);
         }
-
 
         if (i == 0) {
             // if the zero is in [0,0], we can either swap either right or down
@@ -244,17 +255,5 @@ class Node {
             }
         }
         return successors;
-    }
-
-    int[][] getGrid() {
-        return grid;
-    }
-
-    q1.Node getParent() {
-        return parent;
-    }
-
-    int getDepth() {
-        return depth;
     }
 }

@@ -18,7 +18,7 @@ public class Main {
                  break;
 
             // add successors to queue
-            successors = current_node.getSuccessors();
+            successors = current_node.generatePossibleMoves();
             for (int[][] successor : successors) {
                 Node n = new Node(successor, current_node.getDepth() + 1, current_node);
                 if (current_node.getParent() == null)
@@ -43,7 +43,7 @@ public class Main {
 
             if(Arrays.deepEquals(current_node.getGrid(), goal.getGrid())) break;
 
-            successors = current_node.getSuccessors();
+            successors = current_node.generatePossibleMoves();
             // go backwards as we're using a stack
             for(i = successors.size() - 1; i >= 0; i--) {
                 Node n = new Node(successors.get(i), current_node.getDepth() + 1, current_node);
