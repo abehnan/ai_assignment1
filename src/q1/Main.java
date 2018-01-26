@@ -29,6 +29,37 @@ public class Main {
         }
     }
 
+    private static void dfs(Node s, Node goal) {
+        Stack<Node> stack = new Stack<>();
+        Node current_node;
+        ArrayList<int[][]> temp;
+        stack.push(s);
+
+        int count = -1;
+
+        while(!stack.isEmpty()) {
+            count++;
+            System.out.println("count = " + count);
+            current_node = stack.pop();
+            current_node.print();
+
+            if(Arrays.deepEquals(current_node.getGrid(), goal.getGrid())) break;
+
+
+            temp = current_node.getSuccessors();
+            int i;
+            for(i = temp.size()-1; i>=0; i--) {
+                Node s_temp = new Node(temp.get(i), current_node.getDepth() +1, current_node);
+                if(current_node.getParent() == null) {
+                    stack.push(s_temp);
+                }
+                else if(!Node.hasBeenVisited(s_temp.getGrid(), s_temp))
+                    stack.push(s_temp);
+
+            }
+            count++;
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -39,7 +70,7 @@ public class Main {
 
         //System.out.println(Arrays.deepToString(s.state));
         bfs(start_node,goal_node);
-//		dfs(s,goal_state);
+		dfs(start_node,goal_node);
 //        ids(s, goal_state);
 //
 //		ArrayList<int[][]> temp = new ArrayList<int[][]>();
