@@ -30,34 +30,28 @@ public class Main {
     }
 
     private static void dfs(Node s, Node goal) {
+
         Stack<Node> stack = new Stack<>();
         Node current_node;
-        ArrayList<int[][]> temp;
+        ArrayList<int[][]> successors;
         stack.push(s);
-
-        int count = -1;
+        int i;
 
         while(!stack.isEmpty()) {
-            count++;
-            System.out.println("count = " + count);
             current_node = stack.pop();
             current_node.print();
 
             if(Arrays.deepEquals(current_node.getGrid(), goal.getGrid())) break;
 
-
-            temp = current_node.getSuccessors();
-            int i;
-            for(i = temp.size()-1; i>=0; i--) {
-                Node s_temp = new Node(temp.get(i), current_node.getDepth() +1, current_node);
-                if(current_node.getParent() == null) {
-                    stack.push(s_temp);
-                }
-                else if(!Node.hasBeenVisited(s_temp.getGrid(), s_temp))
-                    stack.push(s_temp);
-
+            successors = current_node.getSuccessors();
+            // go backwards as we're using a stack
+            for(i = successors.size() - 1; i >= 0; i--) {
+                Node n = new Node(successors.get(i), current_node.getDepth() +1, current_node);
+                if(current_node.getParent() == null)
+                    stack.push(n);
+                else if(!Node.hasBeenVisited(n.getGrid(), n))
+                    stack.push(n);
             }
-            count++;
         }
     }
 
