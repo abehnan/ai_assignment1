@@ -24,6 +24,7 @@ class Node {
         return n.getParent() != null && (Arrays.deepEquals(grid, n.getParent().getGrid()) || hasBeenVisited(grid, n.getParent()));
     }
 
+
     // redo this one
     ArrayList<int[][]> getSuccessors() {
 
@@ -32,6 +33,8 @@ class Node {
         int[][] successor2 = new int[2][3];
         int[][] successor3 = new int[2][3];
         int i, j = 0;
+        int temp1, temp2, temp3;
+
 
         find_zero_location:
         for(i = 0; i < 2; i++) {
@@ -49,24 +52,22 @@ class Node {
             successor3[k] = Arrays.copyOf(getGrid()[k], getGrid()[k].length);
         }
 
-        // swapping steps
 
-        // if the zero is in the top
-        if(i==0) {
-            // if the zero is in top left, we can only move right or down
-            if(j==0) {
-                int k1, k2;
-                // move right
-                k1 = getGrid()[i][j+1];
-                successor1[i][j] = getGrid()[i][j+1];
+        if (i == 0) {
+            // if the zero is in [0,0], we can either swap either right or down
+            if (j == 0) {
+                // swap right
+                temp1 = getGrid()[i][j+1];
+                successor1[i][j] = temp1;
                 successor1[i][j+1] = 0;
 
-                // move down
-                k2 = getGrid()[i+1][j];
-                successor2[i][j] = getGrid()[i+1][j];
+                // swap down
+                temp2 = getGrid()[i+1][j];
+                successor2[i][j] = temp2;
                 successor2[i+1][j] = 0;
 
-                if(k1 < k2) {
+                // add the successors in the right order
+                if(temp1 < temp2) {
                     successors.add(successor1);
                     successors.add(successor2);
                 }
@@ -75,71 +76,69 @@ class Node {
                     successors.add(successor1);
                 }
             }
-            else if(j==1) {
-                int k1, k2, k3;
-                // move right
-                k1 = getGrid()[i][j+1];
-                successor1[i][j] = getGrid()[i][j+1];
+            // if the zero in [0, 1] we can swap either left, right, or down
+            else if (j == 1) {
+                // swap right
+                temp1 = getGrid()[i][j+1];
+                successor1[i][j] = temp1;
                 successor1[i][j+1] = 0;
 
-                // move left
-                k2 = getGrid()[i][j-1];
-                successor2[i][j] = getGrid()[i][j-1];
+                // swap left
+                temp2 = getGrid()[i][j-1];
+                successor2[i][j] = temp2;
                 successor2[i][j-1] = 0;
 
-                // move down
-                k3 = getGrid()[i+1][j];
-                successor3[i][j] = getGrid()[i+1][j];
+                // swap down
+                temp3 = getGrid()[i+1][j];
+                successor3[i][j] = temp3;
                 successor3[i+1][j] = 0;
 
-                if(k1<k2 && k1<k3) {
+                // add the successors in the right order
+                if (temp1 < temp2 && temp1 < temp3 && temp2 < temp3) {
                     successors.add(successor1);
-                    if(k2<k3) {
-                        successors.add(successor2);
-                        successors.add(successor3);
-                    }
-                    else {
-                        successors.add(successor3);
-                        successors.add(successor2);
-                    }
-                }
-                else if(k2<k3 && k2<k1){
                     successors.add(successor2);
-                    if(k1<k3) {
-                        successors.add(successor1);
-                        successors.add(successor3);
-                    }
-                    else {
-                        successors.add(successor3);
-                        successors.add(successor1);
-                    }
-                }
-                else { //k3 is min
                     successors.add(successor3);
-                    if(k1<k2) {
-                        successors.add(successor1);
-                        successors.add(successor2);
-                    }
-                    else {
-                        successors.add(successor2);
-                        successors.add(successor1);
-                    }
                 }
-
+                else if (temp1 < temp2 && temp1 < temp3 && temp3 < temp2) {
+                    successors.add(successor1);
+                    successors.add(successor3);
+                    successors.add(successor2);
+                }
+                else if (temp2 < temp1 && temp2 < temp3 && temp1 < temp3) {
+                    successors.add(successor2);
+                    successors.add(successor1);
+                    successors.add(successor3);
+                }
+                else if (temp2 < temp1 && temp2 < temp3 && temp3 < temp1) {
+                    successors.add(successor2);
+                    successors.add(successor3);
+                    successors.add(successor1);
+                }
+                else if (temp3 < temp1 && temp3 < temp2 && temp1 < temp2) {
+                    successors.add(successor3);
+                    successors.add(successor1);
+                    successors.add(successor2);
+                }
+                else if (temp3 < temp1 && temp3 < temp2 && temp2 < temp1) {
+                    successors.add(successor3);
+                    successors.add(successor2);
+                    successors.add(successor1);
+                }
             }
-            else { // j==2
-                int k1, k2;
-                // move left
-                k1 = getGrid()[i][j-1];
-                successor1[i][j] = getGrid()[i][j-1];
+            // if the zero in [0, 2] we can swap either left or down
+            else {
+                // swap left
+                temp1 = getGrid()[i][j-1];
+                successor1[i][j] = temp1;
                 successor1[i][j-1] = 0;
 
-                // move down
-                k2 = getGrid()[i+1][j];
-                successor2[i][j] = getGrid()[i+1][j];
+                // swap down
+                temp2= getGrid()[i+1][j];
+                successor2[i][j] = temp2;
                 successor2[i+1][j] = 0;
 
-                if(k1 < k2) {
+                // add the successors in the right order
+                if(temp1 < temp2) {
                     successors.add(successor1);
                     successors.add(successor2);
                 }
@@ -149,20 +148,21 @@ class Node {
                 }
             }
         }
-        else { // i ==1
+        else {
+            // if the zero in [1, 0] we can swap either right or up
             if(j==0) {
-                int k1,k2;
-                // move right
-                k1 = getGrid()[i][j+1];
-                successor1[i][j] = getGrid()[i][j+1];
+                // swap right
+                temp1 = getGrid()[i][j+1];
+                successor1[i][j] = temp1;
                 successor1[i][j+1] = 0;
 
-                //move up
-                k2 = getGrid()[i-1][j];
-                successor2[i][j] = getGrid()[i-1][j];
+                // swap up
+                temp2 = getGrid()[i-1][j];
+                successor2[i][j] = temp2;
                 successor2[i-1][j] = 0;
 
-                if(k1 < k2) {
+                // add the successors in the right order
+                if(temp1 < temp2) {
                     successors.add(successor1);
                     successors.add(successor2);
                 }
@@ -171,69 +171,69 @@ class Node {
                     successors.add(successor1);
                 }
             }
+            // if the zero in [1, 1] we can swap either left, right or up
             else if(j==1) {
-                int k1,k2,k3;
-                // move right
-                k1 =  getGrid()[i][j+1];
-                successor1[i][j] = getGrid()[i][j+1];
-                successor1[i][j+1] = 0;
-                // move left
-                k2 = getGrid()[i][j-1];
-                successor2[i][j] = getGrid()[i][j-1];
-                successor2[i][j-1] = 0;
-                //move up
-                k3 = getGrid()[i-1][j];
-                successor3[i][j] = getGrid()[i-1][j];
-                successor3[i-1][j] = 0;
-
-                if(k1<k2 && k1<k3) {
-                    successors.add(successor1);
-                    if(k2<k3) {
-                        successors.add(successor2);
-                        successors.add(successor3);
-                    }
-                    else {
-                        successors.add(successor3);
-                        successors.add(successor2);
-                    }
-                }
-                else if(k2<k3 && k2<k1){
-                    successors.add(successor2);
-                    if(k1<k3) {
-                        successors.add(successor1);
-                        successors.add(successor3);
-                    }
-                    else {
-                        successors.add(successor3);
-                        successors.add(successor1);
-                    }
-                }
-                else { //k3 is min
-                    successors.add(successor3);
-                    if(k1<k2) {
-                        successors.add(successor1);
-                        successors.add(successor2);
-                    }
-                    else {
-                        successors.add(successor2);
-                        successors.add(successor1);
-                    }
-                }
-            }
-            else { //j==2
-                int k1,k2;
-                // move left
-                k1 = getGrid()[i][j-1];
-                successor1[i][j] = getGrid()[i][j-1];
+                // swap left
+                temp1 = getGrid()[i][j-1];
+                successor1[i][j] = temp1;
                 successor1[i][j-1] = 0;
 
-                //move up
-                k2 = getGrid()[i-1][j];
-                successor2[i][j] = getGrid()[i-1][j];
-                successor2[i-1][j] = 0;
-                //System.out.println(Arrays.deepToString(newState));
+                // swap right
+                temp2 = getGrid()[i][j+1];
+                successor1[i][j] = temp2;
+                successor1[i][j+1] = 0;
 
-                if(k1 < k2) {
+                // swap up
+                temp3 = getGrid()[i-1][j];
+                successor2[i][j] = temp3;
+                successor2[i-1][j] = 0;
+
+                // add the successors in the right order
+                if (temp1 < temp2 && temp1 < temp3 && temp2 < temp3) {
+                    successors.add(successor1);
+                    successors.add(successor2);
+                    successors.add(successor3);
+                }
+                else if (temp1 < temp2 && temp1 < temp3 && temp3 < temp2) {
+                    successors.add(successor1);
+                    successors.add(successor3);
+                    successors.add(successor2);
+                }
+                else if (temp2 < temp1 && temp2 < temp3 && temp1 < temp3) {
+                    successors.add(successor2);
+                    successors.add(successor1);
+                    successors.add(successor3);
+                }
+                else if (temp2 < temp1 && temp2 < temp3 && temp3 < temp1) {
+                    successors.add(successor2);
+                    successors.add(successor3);
+                    successors.add(successor1);
+                }
+                else if (temp3 < temp1 && temp3 < temp2 && temp1 < temp2) {
+                    successors.add(successor3);
+                    successors.add(successor1);
+                    successors.add(successor2);
+                }
+                else if (temp3 < temp1 && temp3 < temp2 && temp2 < temp1) {
+                    successors.add(successor3);
+                    successors.add(successor2);
+                    successors.add(successor1);
+                }
+            }
+            // if the zero in [1, 2] we can swap either left or up
+            else {
+                // swap left
+                temp1 = getGrid()[i][j-1];
+                successor1[i][j] = temp1;
+                successor1[i][j-1] = 0;
+
+                // swap up
+                temp2 = getGrid()[i-1][j];
+                successor2[i][j] = temp2;
+                successor2[i-1][j] = 0;
+
+                // add the successors in the right order
+                if(temp1 < temp2) {
                     successors.add(successor1);
                     successors.add(successor2);
                 }

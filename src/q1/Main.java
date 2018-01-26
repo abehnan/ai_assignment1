@@ -46,7 +46,7 @@ public class Main {
             successors = current_node.getSuccessors();
             // go backwards as we're using a stack
             for(i = successors.size() - 1; i >= 0; i--) {
-                Node n = new Node(successors.get(i), current_node.getDepth() +1, current_node);
+                Node n = new Node(successors.get(i), current_node.getDepth() + 1, current_node);
                 if(current_node.getParent() == null)
                     stack.push(n);
                 else if(!Node.hasBeenVisited(n.getGrid(), n))
@@ -55,6 +55,8 @@ public class Main {
         }
     }
 
+
+
     public static void main(String[] args) {
 
         int[][] start_config = {{1,4,2},{5,3,0}};
@@ -62,16 +64,9 @@ public class Main {
         Node start_node = new Node(start_config, 0, null);
         Node goal_node = new Node(goal_config, 0, null);
 
-        //System.out.println(Arrays.deepToString(s.state));
         bfs(start_node,goal_node);
-		dfs(start_node,goal_node);
-//        ids(s, goal_state);
-//
-//		ArrayList<int[][]> temp = new ArrayList<int[][]>();
-//		temp = s.getSuccessor();
-//		for(int i=0; i <temp.size(); i++) {
-//			System.out.println(temp.get(i).getClass().getSimpleName());
-//		}
+//		dfs(start_node,goal_node);
+
 
     }
 }
