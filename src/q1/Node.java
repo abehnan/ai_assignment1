@@ -15,7 +15,6 @@ class Node {
         this.parent = parent;
     }
 
-
     int[][] getGrid() {
         return grid;
     }
@@ -27,7 +26,6 @@ class Node {
     int getDepth() {
         return depth;
     }
-
 
     void print() {
         System.out.println(Arrays.deepToString(getGrid()));
@@ -49,8 +47,8 @@ class Node {
         int temp1, temp2, temp3;
 
         find_zero_location:
-        for(i = 0; i < 2; i++) {
-            for(j = 0; j < 3; j++) {
+        for(i = 0; i < getGrid().length; i++) {
+            for(j = 0; j < getGrid()[i].length; j++) {
                 if(getGrid()[i][j] == 0) {
                     break find_zero_location;
                 }
