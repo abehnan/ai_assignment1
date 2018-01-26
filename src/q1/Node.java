@@ -5,9 +5,9 @@ import java.util.Arrays;
 
 class Node {
 
-    private int[][] grid;
-    private Node parent;
-    private int depth;
+    private final int[][] grid;
+    private final Node parent;
+    private final int depth;
 
     Node(int[][] grid, int depth, Node parent) {
         this.grid = grid;
@@ -33,10 +33,14 @@ class Node {
 
     // returns true if the grid state has already been encountered
     static boolean hasBeenVisited(int[][] grid, Node n) {
-        return n.getParent() != null && (Arrays.deepEquals(grid, n.getParent().getGrid()) || hasBeenVisited(grid, n.getParent()));
+        if (n.getParent() != null)
+            if (Arrays.deepEquals(grid, n.getParent().getGrid()) || hasBeenVisited(grid, n.getParent()))
+                return true;
+        return false;
     }
 
-    // redo this one
+    // generates all possible grid configurations by applying all valid operations
+    // order of the returned grids is the order of preference
     ArrayList<int[][]> generatePossibleMoves() {
 
         ArrayList<int[][]> successors = new ArrayList<>();
@@ -189,13 +193,13 @@ class Node {
 
                 // swap right
                 temp2 = getGrid()[i][j+1];
-                successor1[i][j] = temp2;
-                successor1[i][j+1] = 0;
+                successor2[i][j] = temp2;
+                successor2[i][j+1] = 0;
 
                 // swap up
                 temp3 = getGrid()[i-1][j];
-                successor2[i][j] = temp3;
-                successor2[i-1][j] = 0;
+                successor3[i][j] = temp3;
+                successor3[i-1][j] = 0;
 
                 // add the successors in the right order
                 if (temp1 < temp2 && temp1 < temp3 && temp2 < temp3) {
