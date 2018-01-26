@@ -30,12 +30,12 @@ class Main {
         }
     }
 
-    private static void dfs(Node s, Node goal) {
+    private static void dfs(Node start, Node goal) {
 
         Stack<Node> stack = new Stack<>();
         Node current_node;
         ArrayList<int[][]> successors;
-        stack.push(s);
+        stack.push(start);
         int i;
         int steps = 0;
         while(!stack.isEmpty()) {
@@ -57,7 +57,7 @@ class Main {
         }
     }
 
-    private static void ids(Node s, Node goal) {
+    private static void ids(Node start, Node goal) {
 		int max_depth = 0;
 		Stack<Node> stack = new Stack<>();
 		Node current_node;
@@ -66,7 +66,7 @@ class Main {
 		outer:
 		while (true) {
 			System.out.println("max_depth = " + max_depth);
-			stack.push(s);
+			stack.push(start);
 
 			while(!stack.isEmpty()) {
 
