@@ -11,8 +11,7 @@ public class Main {
 
     private static ArrayList<Result> hillClimbing() {
 
-        double startingPoint, delta, x, leftX, rightX, currentValue, leftNeighbour, rightNeighbour, leftGap, rightGap;
-        double threshold = Double.MIN_VALUE;
+        double startingPoint, delta, x, leftX, rightX, currentValue, leftNeighbour, rightNeighbour;
         int steps;
         ArrayList<Result> results = new ArrayList<>(100);
 
@@ -28,8 +27,6 @@ public class Main {
                     if (rightX > 10.0) rightX = 10.0;
                     leftNeighbour = Y(leftX);
                     rightNeighbour = Y(rightX);
-                    leftGap = Math.abs(leftNeighbour - currentValue);
-                    rightGap = Math.abs(rightNeighbour - currentValue);
 
                     // debug
 //                    System.out.println("currentValue: " + currentValue);
@@ -37,7 +34,7 @@ public class Main {
 //                    System.out.println("rightNeighbour: " + rightNeighbour);
 //                    System.out.println("step: " + ++steps + "\n");
 
-                    if ((leftGap <= threshold && rightGap <= threshold) || (currentValue >= leftNeighbour && currentValue >= rightNeighbour)) {
+                    if (currentValue >= leftNeighbour && currentValue >= rightNeighbour) {
                         results.add(new Result(startingPoint, delta, steps, currentValue, x));
                         break;
                     }
