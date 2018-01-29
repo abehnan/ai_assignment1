@@ -37,7 +37,7 @@ public class Main {
 //                    System.out.println("rightNeighbour: " + rightNeighbour);
 //                    System.out.println("step: " + ++steps + "\n");
 
-                    if (leftGap <= threshold || rightGap <= threshold || (currentValue >= leftNeighbour && currentValue >= rightNeighbour)) {
+                    if ((leftGap <= threshold && rightGap <= threshold) || (currentValue >= leftNeighbour && currentValue >= rightNeighbour)) {
                         results.add(new Result(startingPoint, delta, steps, currentValue, x));
                         break;
                     }
