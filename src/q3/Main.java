@@ -64,57 +64,76 @@ public class Main {
     private static boolean invalidMove(double a, double b, double temp) {
         double probability = Math.pow(Math.E, -Math.abs(a-b)/temp);
         double rng = Math.random();
-        //        System.out.println("probability = " + probability);
+
+//        System.out.println("a = " + a);
+//        System.out.println("b = " + b);
+//        System.out.println("temp = " + temp);
+//        System.out.println("probability = " + probability);
+//        System.out.println("rng = " + rng);
+
+
         return probability > rng;
     }
 
 
     private static ArrayList<Result> simulatedAnnealing() {
-        double startingPoint, delta = 0.05, x, leftX, rightX, y, leftY, rightY;
+        double startingPoint, x, leftX, rightX, y, leftY, rightY;
         int steps;
         ArrayList<Result> results = new ArrayList<>(100);
-        double temperature = 10000;
-        double alpha = 0.99;
+        double temperature = 1000;
+        double alpha = 0.90;
+        double delta = 0.05;
 
         for (startingPoint = 0.0; startingPoint <= 10.0; startingPoint++) {
             x = startingPoint;
             steps = 0;
             while (true) {
-                y = Y(x);
+
+
                 leftX = x - delta;
                 rightX = x + delta;
                 if (leftX < 0.0) leftX = 0.0;
                 if (rightX > 10.0) rightX = 10.0;
+                y = Y(x);
                 leftY = Y(leftX);
                 rightY = Y(rightX);
 
 
 
                 // debug
-//                System.out.println("currentValue: " + y);
+//                System.out.println("x: " + x);
 //                System.out.println("leftX: " + leftX);
 //                System.out.println("rightX: " + rightX);
+//                System.out.println("y: " + y);
 //                System.out.println("leftY: " + leftY);
 //                System.out.println("rightY: " + rightY);
 
-                if ((leftY < y) && invalidMove(y, leftY, temperature)) {
-                    x = leftX;
-                    System.out.println("invalidMove(y, leftY, temperature)");
+                if ((rightY < y) && invalidMove(y, rightY, temperature)) {
+                    x = rightX;
+//                    System.out.println("invalidMove(y, rightY, temperature)\n");
                 }
 
-                else if ((rightY < y) && invalidMove(y, rightY, temperature)) {
-                    x = rightX;
-                    System.out.println("invalidMove(y, rightY, temperature)");
+                else if ((leftY < y) && invalidMove(y, leftY, temperature)) {
+                    x = leftX;
+//                    System.out.println("invalidMove(y, leftY, temperature)\n");
                 }
+
 
                 else if (y >= leftY && y >= rightY) {
                     results.add(new Result(startingPoint, delta, steps, y, x));
+//                    System.out.println("breaking\n");
                     break;
                 }
-                else if (leftY > rightY && leftY > y)
+                else if (leftY > rightY && leftY > y) {
+//                    System.out.println("x = leftX");
                     x = leftX;
-                else if (rightY >= leftY && rightY > y)
+                }
+
+                else if (rightY >= leftY && rightY > y) {
+                    System.out.println("x = rightX");
                     x = rightX;
+                }
+
 
                 temperature = alpha * temperature;
                 steps++;
