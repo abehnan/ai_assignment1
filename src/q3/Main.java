@@ -11,7 +11,7 @@ public class Main {
 
     private static ArrayList<Result> hillClimbing() {
 
-        double startingPoint, delta, x, currentValue, leftNeighbour, rightNeighbour, leftGap, rightGap;
+        double startingPoint, delta, x, leftX, rightX, currentValue, leftNeighbour, rightNeighbour, leftGap, rightGap;
         double threshold = Double.MIN_VALUE;
         int steps;
         ArrayList<Result> results = new ArrayList<>(100);
@@ -22,8 +22,12 @@ public class Main {
                 steps = 0;
                 while (true) {
                     currentValue = Y(x);
-                    leftNeighbour = Y(x - delta);
-                    rightNeighbour = Y(x + delta);
+                    leftX = x - delta;
+                    rightX = x + delta;
+                    if (leftX < 0.0) leftX = 0.0;
+                    if (rightX > 10.0) rightX = 10.0;
+                    leftNeighbour = Y(leftX);
+                    rightNeighbour = Y(rightX);
                     leftGap = Math.abs(leftNeighbour - currentValue);
                     rightGap = Math.abs(rightNeighbour - currentValue);
 
@@ -34,12 +38,14 @@ public class Main {
 //                    System.out.println("step: " + ++steps + "\n");
 
                     if (leftGap <= threshold || rightGap <= threshold || (currentValue >= leftNeighbour && currentValue >= rightNeighbour)) {
-                        results.add(new Result(startingPoint, delta, steps, currentValue));
+                        results.add(new Result(startingPoint, delta, steps, currentValue, x));
                         break;
-                    } else if (leftNeighbour > rightNeighbour && leftNeighbour > currentValue)
-                        x = x - delta;
+                    }
+                    else if (leftNeighbour > rightNeighbour && leftNeighbour > currentValue)
+                        x = leftX;
                     else if (rightNeighbour >= leftNeighbour && rightNeighbour > currentValue)
-                        x = x + delta;
+                        x = rightX;
+
 
                     steps++;
 
@@ -47,8 +53,6 @@ public class Main {
             }
         }
         return results;
-
-
     }
 
     public static void main(String[] args) {
@@ -58,7 +62,8 @@ public class Main {
             System.out.println("starting point: " + result.getStartingPoint());
             System.out.println("delta: " + result.getDelta());
             System.out.println("steps: " + result.getSteps());
-            System.out.println("max value: " + result.getMaxValue() + "\n");
+            System.out.println("y: " + result.getY());
+            System.out.println("x: " + result.getX() + "\n");
         }
     }
 }
