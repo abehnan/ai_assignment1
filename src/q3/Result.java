@@ -5,12 +5,11 @@ public class Result {
     private final double delta;
     private final int steps;
     private final double y;
+    private final double x;
 
     public double getX() {
         return x;
     }
-
-    private final double x;
 
     public double getStartingPoint() {
         return startingPoint;
