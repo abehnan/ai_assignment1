@@ -169,20 +169,29 @@ public class Main {
                 break;
         }
 
+        System.out.println("startingPoint");
+        if (input == 2)
+            System.out.println("temperature");
+        if (input == 2)
+            System.out.println("coolingFactor");
+        System.out.println("delta");
+        System.out.println("steps");
+        System.out.println("x");
+        System.out.println("y\n");
+
         for (Result result : results) {
 
-//            System.out.println("delta: " + result.getDelta());
-//            System.out.println("steps: " + result.getSteps());
-//            System.out.println("y: " + result.getY());
-//            System.out.println("x: " + result.getX() + "\n");
 
-//            System.out.println(result.getStartingPoint());
-//            System.out.println(result.getTemperature());
-//            System.out.println(result.getCoolingFactor());
-//            System.out.println(result.getDelta());
-//            System.out.println(result.getSteps());
+
+            System.out.println(result.getStartingPoint());
+            if (result.getTemperature() >= 0)
+                System.out.println(result.getTemperature());
+            if (result.getCoolingFactor() >= 0)
+                System.out.println(result.getCoolingFactor());
+            System.out.println(result.getDelta());
+            System.out.println(result.getSteps());
             System.out.println(result.getY());
-//            System.out.println(result.getX());
+            System.out.println(result.getX() + "\n");
         }
     }
 }
