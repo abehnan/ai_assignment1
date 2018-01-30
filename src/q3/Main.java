@@ -14,7 +14,7 @@ public class Main {
 
         double startingPoint, delta, x, leftX, rightX, y, leftY, rightY;
         int steps;
-        ArrayList<Result> results = new ArrayList<>(100);
+        ArrayList<Result> results = new ArrayList<>(110);
 
         for (startingPoint = 0; startingPoint <= 10; startingPoint++) {
             for (delta = 0.01; delta <= 0.1; delta = delta + 0.01) {
@@ -29,6 +29,7 @@ public class Main {
                     leftY = Y(leftX);
                     rightY = Y(rightX);
 
+                    // debug
 //                    if (x == 10.0) {
 //                        System.out.println("currentValue: " + y);
 //                        System.out.println("leftX: " + leftX);
@@ -37,7 +38,6 @@ public class Main {
 //                        System.out.println("rightY: " + rightY);
 //
 //                    }
-                    // debug
 //                    System.out.println("currentValue: " + currentValue);
 //                    System.out.println("leftNeighbour: " + leftNeighbour);
 //                    System.out.println("rightNeighbour: " + rightNeighbour);
@@ -65,6 +65,7 @@ public class Main {
         double probability = Math.pow(Math.E, -Math.abs(a-b)/temp);
         double rng = Math.random();
 
+        // debug
 //        System.out.println("a = " + a);
 //        System.out.println("b = " + b);
 //        System.out.println("temp = " + temp);
@@ -80,66 +81,70 @@ public class Main {
         double startingPoint, x, leftX, rightX, y, leftY, rightY;
         int steps;
         ArrayList<Result> results = new ArrayList<>(100);
-        double temperature = 1000;
-        double alpha = 0.90;
         double delta = 0.05;
 
-        for (startingPoint = 0.0; startingPoint <= 10.0; startingPoint++) {
-            x = startingPoint;
-            steps = 0;
-            while (true) {
+        ArrayList<Double> temperatures = new ArrayList<>(4);
+        temperatures.add(100.0);
+        temperatures.add(1000.0);
+        temperatures.add(10000.0);
+        temperatures.add(100000.0);
+        ArrayList<Double> coolingFactors = new ArrayList<>();
+        coolingFactors.add(0.50);
+        coolingFactors.add(0.60);
+        coolingFactors.add(0.70);
+        coolingFactors.add(0.80);
+        coolingFactors.add(0.90);
+        coolingFactors.add(0.99);
 
+        for (Double temperature : temperatures) {
+            for (Double coolingFactor : coolingFactors) {
+                double temp = temperature;
+                double alpha = coolingFactor;
+                for (startingPoint = 0.0; startingPoint <= 10.0; startingPoint++) {
 
-                leftX = x - delta;
-                rightX = x + delta;
-                if (leftX < 0.0) leftX = 0.0;
-                if (rightX > 10.0) rightX = 10.0;
-                y = Y(x);
-                leftY = Y(leftX);
-                rightY = Y(rightX);
+                    x = startingPoint;
+                    steps = 0;
 
+                    while (true) {
 
+                        leftX = x - delta;
+                        rightX = x + delta;
+                        if (leftX < 0.0) leftX = 0.0;
+                        if (rightX > 10.0) rightX = 10.0;
+                        y = Y(x);
+                        leftY = Y(leftX);
+                        rightY = Y(rightX);
 
-                // debug
-//                System.out.println("x: " + x);
-//                System.out.println("leftX: " + leftX);
-//                System.out.println("rightX: " + rightX);
-//                System.out.println("y: " + y);
-//                System.out.println("leftY: " + leftY);
-//                System.out.println("rightY: " + rightY);
+                        // debug
+        //                System.out.println("x: " + x);
+        //                System.out.println("leftX: " + leftX);
+        //                System.out.println("rightX: " + rightX);
+        //                System.out.println("y: " + y);
+        //                System.out.println("leftY: " + leftY);
+        //                System.out.println("rightY: " + rightY);
 
-                if ((rightY < y) && invalidMove(y, rightY, temperature)) {
-                    x = rightX;
-//                    System.out.println("invalidMove(y, rightY, temperature)\n");
+                        if ((rightY < y) && invalidMove(y, rightY, temp))
+                            x = rightX;
+                        else if ((leftY < y) && invalidMove(y, leftY, temp))
+                            x = leftX;
+                        else if (y >= leftY && y >= rightY) {
+                            results.add(new Result(startingPoint, delta, steps, y, x, alpha, temperature));
+                            break;
+                        }
+                        else if (leftY > rightY && leftY > y)
+                            x = leftX;
+                        else if (rightY >= leftY && rightY > y)
+                            x = rightX;
+
+                        temp = alpha * temp;
+                        steps++;
+
+                    }
                 }
-
-                else if ((leftY < y) && invalidMove(y, leftY, temperature)) {
-                    x = leftX;
-//                    System.out.println("invalidMove(y, leftY, temperature)\n");
-                }
-
-
-                else if (y >= leftY && y >= rightY) {
-                    results.add(new Result(startingPoint, delta, steps, y, x));
-//                    System.out.println("breaking\n");
-                    break;
-                }
-                else if (leftY > rightY && leftY > y) {
-//                    System.out.println("x = leftX");
-                    x = leftX;
-                }
-
-                else if (rightY >= leftY && rightY > y) {
-                    System.out.println("x = rightX");
-                    x = rightX;
-                }
-
-
-                temperature = alpha * temperature;
-                steps++;
-
             }
         }
+
+
         return results;
     }
 
@@ -158,8 +163,6 @@ public class Main {
                 break;
             case 2:
                 results = simulatedAnnealing();
-                System.out.println("temp = 10000");
-                System.out.println("alpha = 0.99\n");
                 break;
             default:
                 System.out.println("Invalid choice");
@@ -167,11 +170,19 @@ public class Main {
         }
 
         for (Result result : results) {
-            System.out.println("starting point: " + result.getStartingPoint());
-            System.out.println("delta: " + result.getDelta());
-            System.out.println("steps: " + result.getSteps());
-            System.out.println("y: " + result.getY());
-            System.out.println("x: " + result.getX() + "\n");
+
+//            System.out.println("delta: " + result.getDelta());
+//            System.out.println("steps: " + result.getSteps());
+//            System.out.println("y: " + result.getY());
+//            System.out.println("x: " + result.getX() + "\n");
+
+//            System.out.println(result.getStartingPoint());
+//            System.out.println(result.getTemperature());
+//            System.out.println(result.getCoolingFactor());
+//            System.out.println(result.getDelta());
+//            System.out.println(result.getSteps());
+            System.out.println(result.getY());
+//            System.out.println(result.getX());
         }
     }
 }

@@ -37,11 +37,13 @@ class Main {
         ArrayList<int[][]> successors;
         stack.push(start);
         int i;
-        int steps = 0;
+//        int steps = 0;
+
         while(!stack.isEmpty()) {
             current_node = stack.pop();
-            System.out.println("step " + steps++);
             current_node.print();
+
+            //            System.out.println("step " + steps++);
 
             if(Arrays.deepEquals(current_node.getGrid(), goal.getGrid())) break;
 
@@ -74,7 +76,7 @@ class Main {
 
                 if (current_node.getDepth() > max_depth) continue;
 
-                System.out.println("depth: " + current_node.getDepth());
+//                System.out.println("depth: " + current_node.getDepth());
                 current_node.print();
 
                 if(Arrays.deepEquals(current_node.getGrid(),goal.getGrid()))
